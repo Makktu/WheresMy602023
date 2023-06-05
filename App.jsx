@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
 import HomeScreen from './src/screens/HomeScreen';
+import Buttons from './src/components/Buttons';
 
 export default function App() {
   return (
@@ -9,6 +10,7 @@ export default function App() {
       <StatusBar style='light' />
       <View style={styles.container}>
         <HomeScreen />
+        <Buttons />
       </View>
     </>
   );
