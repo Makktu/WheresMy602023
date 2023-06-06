@@ -1,24 +1,32 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import getBuses from '../api/api';
+import { util } from 'util';
 
 let parseString = require('react-native-xml2js').parseString;
+var xml = '<root>Hello xml2js!</root>';
 
 const Buttons = () => {
   const [errorMessage, setErrorMessage] = useState('');
-  let json;
+
   // *
   let travellingDirection = '';
+
   const searchBuses = async (travellingDirection) => {
     if (!travellingDirection) {
       return;
     }
+    console.log(travellingDirection);
     try {
       const response = await getBuses.get();
-      parseString(response.data, function (err, result) {
-        json = JSON.stringify(result);
-        console.log(json);
-      });
+      console.log(response.data);
+      // parseString(response.data, function (err, result) {
+      //   console.log(result.Siri.ServiceDelivery[0].ResponseTimestamp);
+      //   console.log(
+      //     result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+      //       .VehicleActivity[0].MonitoredVehicleJourney[0].DirectionRef
+      //   );
+      // });
       setErrorMessage('');
     } catch (err) {
       setErrorMessage(err);
