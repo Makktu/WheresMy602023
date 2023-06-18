@@ -1,9 +1,40 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import getBuses from '../api/api';
-import getLocation from '../api/addressApi';
+// import getLocation from '../api/addressApi';
 
 let parseString = require('react-native-xml2js').parseString;
+
+function printLoc(lat, lon) {
+  let places;
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      places = JSON.parse(this.responseText);
+      console.log(places);
+      if (places.address.road) {
+        locationOfBus = `${places.address.road}, ${places.address.suburb}`;
+      } else if (places.address.suburb) {
+        locationOfBus = `${places.address.suburb}`;
+      } else {
+        locationOfBus = null;
+      }
+
+      if (locationOfBus) {
+        if (locationOfBus.length > 29) {
+          locationOfBus = locationOfBus.substring(0, 29);
+        }
+        console.log(`${locationOfBus}`);
+      }
+    }
+  };
+  xhttp.open(
+    'GET',
+    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`,
+    true
+  );
+  xhttp.send();
+}
 
 const Buttons = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -18,10 +49,16 @@ const Buttons = () => {
       const response = await getBuses.get();
       // console.log(response.data);
       parseString(response.data, function (err, result) {
-        console.log(
-          result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+        let lat =
+          +result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
             .VehicleActivity[0].MonitoredVehicleJourney[0].VehicleLocation[0]
-        );
+            .Latitude;
+        let lon =
+          +result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+            .VehicleActivity[0].MonitoredVehicleJourney[0].VehicleLocation[0]
+            .Longitude;
+        console.log(lat, lon);
+        printLoc(lat, lon);
         // console.log(result.Siri.ServiceDelivery[0].ResponseTimestamp);
         // console.log(
         //   result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
