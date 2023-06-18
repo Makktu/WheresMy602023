@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import getBuses from '../api/api';
-// import getLocation from '../api/addressApi';
+import getLocation from '../api/addressApi';
 
 let parseString = require('react-native-xml2js').parseString;
 
@@ -58,7 +58,7 @@ const Buttons = () => {
             .VehicleActivity[0].MonitoredVehicleJourney[0].VehicleLocation[0]
             .Longitude;
         console.log(lat, lon);
-        printLoc(lat, lon);
+        getLocation(lat, lon);
         // console.log(result.Siri.ServiceDelivery[0].ResponseTimestamp);
         // console.log(
         //   result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
