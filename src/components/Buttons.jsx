@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import getBuses from '../api/api';
-import { util } from 'util';
+import getLocation from '../api/addressApi';
 
 let parseString = require('react-native-xml2js').parseString;
-var xml = '<root>Hello xml2js!</root>';
 
 const Buttons = () => {
   const [errorMessage, setErrorMessage] = useState('');
-
   // *
-  let travellingDirection = '';
 
   const searchBuses = async (travellingDirection) => {
     if (!travellingDirection) {
@@ -19,14 +16,18 @@ const Buttons = () => {
     console.log(travellingDirection);
     try {
       const response = await getBuses.get();
-      console.log(response.data);
-      // parseString(response.data, function (err, result) {
-      //   console.log(result.Siri.ServiceDelivery[0].ResponseTimestamp);
-      //   console.log(
-      //     result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
-      //       .VehicleActivity[0].MonitoredVehicleJourney[0].DirectionRef
-      //   );
-      // });
+      // console.log(response.data);
+      parseString(response.data, function (err, result) {
+        console.log(
+          result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+            .VehicleActivity[0].MonitoredVehicleJourney[0].VehicleLocation[0]
+        );
+        // console.log(result.Siri.ServiceDelivery[0].ResponseTimestamp);
+        // console.log(
+        //   result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+        //     .VehicleActivity[0].MonitoredVehicleJourney[0].DirectionRef
+        // );
+      });
       setErrorMessage('');
     } catch (err) {
       setErrorMessage(err);
@@ -40,8 +41,7 @@ const Buttons = () => {
     <View style={styles.btnContainerStyle}>
       <TouchableOpacity
         onPress={() => {
-          travellingDirection = 'INBOUND';
-          searchBuses(travellingDirection);
+          searchBuses('INBOUND');
         }}
         style={styles.workButtonStyle}
       >
@@ -49,8 +49,7 @@ const Buttons = () => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          travellingDirection = 'OUTBOUND';
-          searchBuses(travellingDirection);
+          searchBuses('OUTBOUND');
         }}
         style={[styles.workButtonStyle, { backgroundColor: 'cyan' }]}
       >
