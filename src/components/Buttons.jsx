@@ -5,40 +5,8 @@ import getLocation from '../api/addressApi';
 
 let parseString = require('react-native-xml2js').parseString;
 
-function printLoc(lat, lon) {
-  let places;
-  let xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      places = JSON.parse(this.responseText);
-      console.log(places);
-      if (places.address.road) {
-        locationOfBus = `${places.address.road}, ${places.address.suburb}`;
-      } else if (places.address.suburb) {
-        locationOfBus = `${places.address.suburb}`;
-      } else {
-        locationOfBus = null;
-      }
-
-      if (locationOfBus) {
-        if (locationOfBus.length > 29) {
-          locationOfBus = locationOfBus.substring(0, 29);
-        }
-        console.log(`${locationOfBus}`);
-      }
-    }
-  };
-  xhttp.open(
-    'GET',
-    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`,
-    true
-  );
-  xhttp.send();
-}
-
 const Buttons = () => {
   const [errorMessage, setErrorMessage] = useState('');
-  // *
 
   const searchBuses = async (travellingDirection) => {
     if (!travellingDirection) {
@@ -58,12 +26,7 @@ const Buttons = () => {
             .VehicleActivity[0].MonitoredVehicleJourney[0].VehicleLocation[0]
             .Longitude;
         console.log(lat, lon);
-        getLocation(lat, lon);
-        // console.log(result.Siri.ServiceDelivery[0].ResponseTimestamp);
-        // console.log(
-        //   result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
-        //     .VehicleActivity[0].MonitoredVehicleJourney[0].DirectionRef
-        // );
+        console.log(getLocation(lat, lon));
       });
       setErrorMessage('');
     } catch (err) {
@@ -71,8 +34,6 @@ const Buttons = () => {
       console.log('💥', err);
     }
   };
-
-  // *_________________________________________________
 
   return (
     <View style={styles.btnContainerStyle}>
