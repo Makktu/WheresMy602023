@@ -1,69 +1,37 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import getBuses from '../api/api';
-import getLocation from '../api/addressApi';
 
-let parseString = require('react-native-xml2js').parseString;
-
-const Buttons = () => {
+const Buttons = ({ updateLocation }) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const [locationOfBus, setLocationOfBus] = useState('');
-
-  const searchBuses = async (travellingDirection) => {
-    if (!travellingDirection) {
-      return;
-    }
-    console.log(travellingDirection);
-    try {
-      const response = await getBuses.get();
-      // console.log(response.data);
-      parseString(response.data, function (err, result) {
-        let lat =
-          +result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
-            .VehicleActivity[0].MonitoredVehicleJourney[0].VehicleLocation[0]
-            .Latitude;
-        let lon =
-          +result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
-            .VehicleActivity[0].MonitoredVehicleJourney[0].VehicleLocation[0]
-            .Longitude;
-        console.log(lat, lon);
-        setLocationOfBus(getLocation(lat, lon));
-        console.log(locationOfBus, '<<<');
-      });
-      setErrorMessage('');
-    } catch (err) {
-      setErrorMessage(err);
-      console.log('💥', err);
-    }
-  };
 
   return (
-    <View style={styles.btnContainerStyle}>
-      <Text style={styles.locationStyle}>HERE: {locationOfBus}</Text>
-      <TouchableOpacity
-        onPress={() => {
-          searchBuses('INBOUND');
-        }}
-        style={styles.workButtonStyle}
-      >
-        <Text style={styles.textStyle}>To Work</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          searchBuses('OUTBOUND');
-        }}
-        style={[styles.workButtonStyle, { backgroundColor: 'cyan' }]}
-      >
-        <Text style={styles.textStyle}>To Home</Text>
-      </TouchableOpacity>
-    </View>
+    <>
+      <View style={styles.btnContainerStyle}>
+        <TouchableOpacity
+          onPress={() => {
+            updateLocation('INBOUND');
+          }}
+          style={styles.workButtonStyle}
+        >
+          <Text style={styles.textStyle}>To Hospital</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            updateLocation('OUTBOUND');
+          }}
+          style={[styles.workButtonStyle, { backgroundColor: 'cyan' }]}
+        >
+          <Text style={styles.textStyle}>To Willenhall</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   workButtonStyle: {
     height: 100,
-    width: 150,
+    width: 180,
     backgroundColor: 'orange',
     borderRadius: 10,
     margin: 10,
