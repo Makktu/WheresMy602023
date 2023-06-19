@@ -7,6 +7,7 @@ let parseString = require('react-native-xml2js').parseString;
 
 const Buttons = () => {
   const [errorMessage, setErrorMessage] = useState('');
+  const [locationOfBus, setLocationOfBus] = useState('');
 
   const searchBuses = async (travellingDirection) => {
     if (!travellingDirection) {
@@ -26,7 +27,8 @@ const Buttons = () => {
             .VehicleActivity[0].MonitoredVehicleJourney[0].VehicleLocation[0]
             .Longitude;
         console.log(lat, lon);
-        console.log(getLocation(lat, lon));
+        setLocationOfBus(getLocation(lat, lon));
+        console.log(locationOfBus, '<<<');
       });
       setErrorMessage('');
     } catch (err) {
@@ -37,6 +39,7 @@ const Buttons = () => {
 
   return (
     <View style={styles.btnContainerStyle}>
+      <Text style={styles.locationStyle}>HERE: {locationOfBus}</Text>
       <TouchableOpacity
         onPress={() => {
           searchBuses('INBOUND');
@@ -75,6 +78,9 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     padding: 10,
+  },
+  locationStyle: {
+    color: 'orangered',
   },
 });
 
