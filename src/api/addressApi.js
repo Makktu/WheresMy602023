@@ -7,6 +7,8 @@ const findBusLocation = async (lat, lon) => {
   // .then((res) => {
   //   return res.data.address.road + ', ' + res.data.address.suburb;
   // });
+  console.log(res.data);
+
   return res.data.address.road + ', ' + res.data.address.suburb;
 };
 
