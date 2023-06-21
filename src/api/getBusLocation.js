@@ -18,18 +18,14 @@ const reachOut = async (lat, lon) => {
 };
 
 const searchBuses = async (travellingDirection = 'OUTBOUND') => {
-  console.log('here!!!', travellingDirection);
+  console.log('DIRECTION:', travellingDirection);
   try {
     const response = await getBuses.get();
     parseString(response.data, function (err, result) {
-      // console.log(
-      //   result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
-      //     .VehicleActivity[3].MonitoredVehicleJourney[0].DirectionRef
-      // );
       let loopAmount =
         result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
           .VehicleActivity.length;
-      console.log(loopAmount);
+      console.log('ARRAY LENGTH:', loopAmount);
       let thisBus;
       for (let a = 0; a < loopAmount - 1; a++) {
         console.log(
@@ -40,7 +36,10 @@ const searchBuses = async (travellingDirection = 'OUTBOUND') => {
         if (
           result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
             .VehicleActivity[a].MonitoredVehicleJourney[0].DirectionRef ==
-          travellingDirection
+            travellingDirection &&
+          result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+            .VehicleActivity[a].MonitoredVehicleJourney[0].VehicleLocation[0]
+            .Latitude < 52.4072268987048
         ) {
           thisBus = a;
           break;
