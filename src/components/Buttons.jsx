@@ -13,7 +13,7 @@ const Buttons = ({ updateLocation }) => {
           }}
           style={styles.workButtonStyle}
         >
-          <Text style={styles.textStyle}>To Hospital</Text>
+          <Text style={styles.textStyle}>Work</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -21,7 +21,7 @@ const Buttons = ({ updateLocation }) => {
           }}
           style={[styles.workButtonStyle, { backgroundColor: 'cyan' }]}
         >
-          <Text style={styles.textStyle}>To Willenhall</Text>
+          <Text style={styles.textStyle}>Home</Text>
         </TouchableOpacity>
       </View>
     </>

@@ -28,11 +28,13 @@ const searchBuses = async (travellingDirection = 'OUTBOUND') => {
       console.log('ARRAY LENGTH:', loopAmount);
       let thisBus;
       for (let a = 0; a < loopAmount - 1; a++) {
-        console.log(
-          a,
-          result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
-            .VehicleActivity[a].MonitoredVehicleJourney[0].DirectionRef
-        );
+        // console.log(
+        //   a,
+        //   result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+        //     .VehicleActivity[a].MonitoredVehicleJourney[0].DirectionRef,
+        //   result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+        //     .VehicleActivity[a].MonitoredVehicleJourney[0]
+        // );
         if (
           result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
             .VehicleActivity[a].MonitoredVehicleJourney[0].DirectionRef ==
@@ -44,8 +46,25 @@ const searchBuses = async (travellingDirection = 'OUTBOUND') => {
           thisBus = a;
           break;
         }
+        if (
+          result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+            .VehicleActivity[a].MonitoredVehicleJourney[0].DirectionRef ==
+            'OUTBOUND' &&
+          result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+            .VehicleActivity[a].MonitoredVehicleJourney[0].OriginName[0] ==
+            'Arena Shopping Park'
+        ) {
+          thisBus = a;
+          break;
+        }
+        console.log(
+          '>>>>...',
+          result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
+            .VehicleActivity[a].MonitoredVehicleJourney[0].OriginName[0]
+        );
       }
       console.log('thisbus:', thisBus);
+      if (!thisBus) return null;
       lat =
         +result.Siri.ServiceDelivery[0].VehicleMonitoringDelivery[0]
           .VehicleActivity[thisBus].MonitoredVehicleJourney[0]
